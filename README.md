@@ -1,4 +1,6 @@
-# Walthamstow Route Trainer
+# walthamstow-bus-garage-route-trainer
+Public
+
 
 Route learning aid for new drivers at Stagecoach London's Walthamstow Avenue (AW) garage. It covers every route the garage runs: **379, 385, 397, W5, W11, W12, W16 and W19**.
 
