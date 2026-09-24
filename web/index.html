@@ -1088,13 +1088,13 @@ async function refreshLive(){
       STATUS=next; ok=true;
     }catch(e){}
   }
-  // 2. The copy published with the app, refreshed every few hours
+  // 2. The copy published with the app, refreshed every 15 minutes
   try{
     const s=await getLocal("data/status.json");
     if(s&&s.lines&&s.checkedAt){
       if(!STATUS.checkedAt||new Date(s.checkedAt)>new Date(STATUS.checkedAt))STATUS=s;
       else if(ok)Object.keys(s.lines).forEach(k=>{const cur=STATUS.lines[k];if(cur&&!cur.disruptions.length&&k!==ROUTE.id)cur.disruptions=s.lines[k].disruptions||[]});
-      if(Date.now()-new Date(s.checkedAt)<6*3600e3)ok=true;
+      if(Date.now()-new Date(s.checkedAt)<3600e3)ok=true; // published every 15 min; older than an hour means the refresh has stalled
     }
   }catch(e){}
   try{const c=await getLocal("data/changes.json");if(c&&c.routes)CHANGES=c}catch(e){}
@@ -1428,7 +1428,7 @@ function renderNotesAuto(){
   ${appCardHtml()}
   <div class="card small src" style="display:flex;flex-direction:column;gap:6px">
     <strong style="color:var(--ink)">About this data</strong>
-    <p>Stop order, stop letters and the map come from TfL’s route data${upd?`, last changed ${esc(upd)}`:""}. The app checks TfL for changes every few hours and updates itself.</p>
+    <p>Stop order, stop letters and the map come from TfL’s route data${upd?`, last changed ${esc(upd)}`:""}. The app checks TfL for changes every 15 minutes and updates itself.</p>
     ${ROUTE.osm
       ?`<p>Road names, turns and the hazard notes come from <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> (© OpenStreetMap contributors), matched automatically to TfL’s route line. ${verifyN} stop${verifyN===1?"":"s"} near a junction or a change of road ${verifyN===1?"is":"are"} marked “confirm road on drive”. Hazard notes list what the map records, such as height limits, bus gates, schools and speed humps. They don’t cover everything on the road.</p>`
       :`<p>Road names and hazard notes aren’t included for this route yet, and turns in Directions are worked out from TfL’s route line.</p>`}
