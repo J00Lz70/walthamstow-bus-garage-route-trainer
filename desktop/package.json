@@ -1,0 +1,41 @@
+{
+  "name": "w19-route-trainer",
+  "productName": "Walthamstow Route Trainer",
+  "version": "1.0.0",
+  "description": "Route learning aid for new drivers on the Walthamstow garage bus routes",
+  "author": "Walthamstow Route Trainer",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis --publish never"
+  },
+  "devDependencies": {
+    "electron": "31.7.7",
+    "electron-builder": "24.13.3"
+  },
+  "build": {
+    "appId": "uk.w19.routetrainer",
+    "productName": "Walthamstow Route Trainer",
+    "files": [
+      "main.js",
+      "config.json",
+      "offline/**/*"
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "shortcutName": "Walthamstow Route Trainer"
+    },
+    "artifactName": "Walthamstow-Route-Trainer-Setup.${ext}"
+  }
+}

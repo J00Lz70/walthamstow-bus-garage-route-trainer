@@ -1,0 +1,43 @@
+plugins {
+    id 'com.android.application'
+}
+
+// Release signing comes from environment variables set by the GitHub workflow.
+// Without them the APK is signed with a throwaway debug key (installs fine, but updates need an uninstall first).
+def ksFile = System.getenv("ANDROID_KEYSTORE_FILE")
+
+android {
+    namespace 'uk.w19.routetrainer'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'uk.w19.routetrainer'
+        minSdk 24
+        targetSdk 34
+        versionCode((project.findProperty('versionCode') ?: '1').toString().toInteger())
+        versionName "1.0." + (project.findProperty('versionCode') ?: '1').toString()
+    }
+
+    signingConfigs {
+        release {
+            if (ksFile) {
+                storeFile file(ksFile)
+                storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("ANDROID_KEY_ALIAS")
+                keyPassword System.getenv("ANDROID_KEY_PASSWORD")
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig ksFile ? signingConfigs.release : signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}

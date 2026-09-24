@@ -1,0 +1,7 @@
+{
+  "name": "Walthamstow Avenue",
+  "code": "AW",
+  "operator": "Stagecoach London",
+  "note": "Edit the routes list to match your garage's current allocation. Use TfL route numbers; letters in lower or upper case are fine.",
+  "routes": ["379", "385", "397", "W5", "W11", "W12", "W16", "W19"]
+}
