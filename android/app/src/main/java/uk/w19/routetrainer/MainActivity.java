@@ -12,7 +12,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 /**
- * Walthamstow Route Trainer for Android.
+ * Walthamstow Bus Garage Route Trainer for Android.
  * Opens the hosted web app, so new versions and TfL updates arrive without reinstalling.
  * The web app's own offline cache keeps it working without signal; on a first launch with
  * no connection it opens the copy bundled inside the APK.

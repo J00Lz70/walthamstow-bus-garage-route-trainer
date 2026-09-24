@@ -1,9 +1,9 @@
 {
   "name": "w19-route-trainer",
-  "productName": "Walthamstow Route Trainer",
+  "productName": "Walthamstow Bus Garage Route Trainer",
   "version": "1.0.0",
   "description": "Route learning aid for new drivers on the Walthamstow garage bus routes",
-  "author": "Walthamstow Route Trainer",
+  "author": "Walthamstow Bus Garage Route Trainer",
   "main": "main.js",
   "private": true,
   "scripts": {
@@ -16,7 +16,7 @@
   },
   "build": {
     "appId": "uk.w19.routetrainer",
-    "productName": "Walthamstow Route Trainer",
+    "productName": "Walthamstow Bus Garage Route Trainer",
     "files": [
       "main.js",
       "config.json",
@@ -34,8 +34,8 @@
       "oneClick": true,
       "perMachine": false,
       "createDesktopShortcut": true,
-      "shortcutName": "Walthamstow Route Trainer"
+      "shortcutName": "Walthamstow Bus Garage Route Trainer"
     },
-    "artifactName": "Walthamstow-Route-Trainer-Setup.${ext}"
+    "artifactName": "Walthamstow-Bus-Garage-Route-Trainer-Setup.${ext}"
   }
 }

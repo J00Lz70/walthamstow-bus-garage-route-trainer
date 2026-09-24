@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Route Trainer</string>
+    <string name="app_name">Walthamstow Bus Garage</string>
     <!-- Replaced by the GitHub workflow with the web app's address -->
     <string name="start_url" translatable="false">__START_URL__</string>
 </resources>

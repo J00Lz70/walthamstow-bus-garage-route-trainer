@@ -47,11 +47,11 @@ jobs:
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: gradle assembleRelease -PversionCode=${{ github.run_number }} --no-daemon --stacktrace
-      - run: cp android/app/build/outputs/apk/release/app-release.apk Walthamstow-Route-Trainer.apk
+      - run: cp android/app/build/outputs/apk/release/app-release.apk Walthamstow-Bus-Garage-Route-Trainer.apk
       - uses: actions/upload-artifact@v4
         with:
           name: android
-          path: Walthamstow-Route-Trainer.apk
+          path: Walthamstow-Bus-Garage-Route-Trainer.apk
 
   windows:
     runs-on: windows-latest
@@ -79,7 +79,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: windows
-          path: desktop/dist/Walthamstow-Route-Trainer-Setup.exe
+          path: desktop/dist/Walthamstow-Bus-Garage-Route-Trainer-Setup.exe
 
   release:
     needs: [android, windows]
@@ -92,12 +92,12 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_type == 'tag' && github.ref_name || format('apps-{0}', github.run_number) }}
-          name: Walthamstow Route Trainer apps (build ${{ github.run_number }})
+          name: Walthamstow Bus Garage Route Trainer apps (build ${{ github.run_number }})
           make_latest: true
           body: |
-            **Android:** download `Walthamstow-Route-Trainer.apk` on your phone and open it. Allow installs from your browser if Android asks.
-            **Windows:** download and run `Walthamstow-Route-Trainer-Setup.exe`. If Windows SmartScreen appears, choose More info, then Run anyway.
+            **Android:** download `Walthamstow-Bus-Garage-Route-Trainer.apk` on your phone and open it. Allow installs from your browser if Android asks.
+            **Windows:** download and run `Walthamstow-Bus-Garage-Route-Trainer-Setup.exe`. If Windows SmartScreen appears, choose More info, then Run anyway.
             Both apps open the hosted trainer, so new routes, content and TfL updates arrive without reinstalling.
           files: |
-            out/Walthamstow-Route-Trainer.apk
-            out/Walthamstow-Route-Trainer-Setup.exe
+            out/Walthamstow-Bus-Garage-Route-Trainer.apk
+            out/Walthamstow-Bus-Garage-Route-Trainer-Setup.exe

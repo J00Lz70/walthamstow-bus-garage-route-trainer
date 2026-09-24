@@ -1,6 +1,6 @@
 {
-  "name": "Walthamstow Route Trainer",
-  "short_name": "Route Trainer",
+  "name": "Walthamstow Bus Garage Route Trainer",
+  "short_name": "Walthamstow Bus Garage",
   "description": "Route learning aid for new drivers on the Walthamstow garage bus routes, with live TfL service updates.",
   "id": "./",
   "start_url": "./",

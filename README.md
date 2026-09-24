@@ -1,6 +1,4 @@
-# walthamstow-bus-garage-route-trainer
-Public
-
+# Walthamstow Bus Garage Route Trainer
 
 Route learning aid for new drivers at Stagecoach London's Walthamstow Avenue (AW) garage. It covers every route the garage runs: **379, 385, 397, W5, W11, W12, W16 and W19**.
 
@@ -15,8 +13,8 @@ For each route you get stops and stop letters in both directions, learning by se
 It comes as:
 
 - **A web app** hosted free on GitHub Pages. It installs from Chrome on Android and from Edge or Chrome on Windows, and works offline.
-- **An Android app** (`Walthamstow-Route-Trainer.apk`) to install directly on a phone.
-- **A Windows app** (`Walthamstow-Route-Trainer-Setup.exe`).
+- **An Android app** (`Walthamstow-Bus-Garage-Route-Trainer.apk`) to install directly on a phone.
+- **A Windows app** (`Walthamstow-Bus-Garage-Route-Trainer-Setup.exe`).
 
 Both installable apps open the hosted web app. When you change anything in `web/`, every installed copy picks up the change the next time it opens, with no reinstall.
 
@@ -56,10 +54,10 @@ The **Driver notes** tab in the app also links to this downloads page.
 
 ## Installing
 
-**Android (APK):** open the release page on your phone and download `Walthamstow-Route-Trainer.apk`. Open it and allow installs from your browser if Android asks.
+**Android (APK):** open the release page on your phone and download `Walthamstow-Bus-Garage-Route-Trainer.apk`. Open it and allow installs from your browser if Android asks.
 Alternatively, open the web app address in Chrome and tap **Install app** (or ⋮ → **Add to Home screen → Install**).
 
-**Windows:** download and run `Walthamstow-Route-Trainer-Setup.exe`. The installer isn't code-signed, so Windows SmartScreen may warn you. Choose **More info → Run anyway**.
+**Windows:** download and run `Walthamstow-Bus-Garage-Route-Trainer-Setup.exe`. The installer isn't code-signed, so Windows SmartScreen may warn you. Choose **More info → Run anyway**.
 Alternatively, open the web app address in Edge or Chrome and click **Install app** (or the install icon in the address bar).
 
 ---
