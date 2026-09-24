@@ -14,7 +14,7 @@ const DATA = path.join(ROOT, "web", "data");
 const ENDPOINTS = (process.env.OVERPASS_URL || "https://overpass-api.de/api/interpreter,https://overpass.kumi.systems/api/interpreter").split(",");
 const FORCE = process.argv.includes("--force");
 const ONLY = (process.argv.find(a => a.startsWith("--route=")) || "").slice(8).toLowerCase();
-const VERSION = 1; // bump to re-process every route after changing this script
+const VERSION = 3; // bump to re-process every route after changing this script
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const log = [];
 const note = s => { console.log(s); log.push(s); };
@@ -157,7 +157,16 @@ function processDirection(dir, osm, P, label) {
   }
 
   // runs of the same road, with junction noise smoothed out
-  const keyOf = wi => { if (wi === null) return "?"; const t = ways[wi].tags || {}; return isRbt(t) ? "@rbt" : roadName(t); };
+  // group by road name only, so a road whose A-number is tagged on some parts but not others
+  // doesn't look like a change of road; show the fullest version of the name
+  const display = new Map();
+  const keyOf = wi => {
+    if (wi === null) return "?";
+    const t = ways[wi].tags || {}; if (isRbt(t)) return "@rbt";
+    const full = roadName(t), key = (t.name || "").trim() || full;
+    if (key && (!display.has(key) || full.length > display.get(key).length)) display.set(key, full);
+    return key;
+  };
   let runs = [];
   wayAt.forEach((wi, i) => { const k = keyOf(wi); const r = runs[runs.length - 1]; if (r && r.key === k) { r.i1 = i; r.ways.add(wi); } else runs.push({ key: k, i0: i, i1: i, ways: new Set([wi]) }); });
   const len = r => S[r.i1].cum - S[r.i0].cum + 8;
@@ -178,7 +187,7 @@ function processDirection(dir, osm, P, label) {
     for (let k = runs.length - 1; k > 0; k--) if (runs[k].key === runs[k - 1].key) { mergeInto(runs[k - 1], runs[k]); runs.splice(k, 1); changed = true; }
     if (!changed) break;
   }
-  runs = runs.map(r => ({ ...r, name: r.key === "?" ? "" : r.key, rbt: r.key === "@rbt", unknown: r.key === "?" }));
+  runs = runs.map(r => ({ ...r, name: r.key === "?" || r.key === "@rbt" ? "" : (display.get(r.key) || r.key), rbt: r.key === "@rbt", unknown: r.key === "?" }));
   const runAt = i => runs.find(r => i >= r.i0 && i <= r.i1) || runs[runs.length - 1];
   const nameAt = i => { const r = runAt(i); if (!r.rbt) return r.name; const k = runs.indexOf(r); return (runs[k + 1] && runs[k + 1].name) || (runs[k - 1] && runs[k - 1].name) || ""; };
 
@@ -217,14 +226,15 @@ function processDirection(dir, osm, P, label) {
 
   // hazards and features, each tied to the stop just before it
   const feats = [], add = (cum, kind, text) => feats.push({ s: stopBefore(cum), cum: Math.round(cum), kind, text });
-  const seenWay = new Set();
+  const seenWay = new Set(), busRoads = new Set();
   runs.forEach(r => r.ways.forEach(wi => {
     if (wi === null || seenWay.has(wi)) return; seenWay.add(wi);
     const t = ways[wi].tags || {}; const i0 = wayAt.indexOf(wi); if (i0 < 0) return;
     const road = nameAt(i0) || "an unnamed road";
     if (t.maxheight && t.maxheight !== "none" && t.maxheight !== "default") add(S[i0].cum, "height", `Height limit ${fmtLimit(t.maxheight)} on ${road}`);
     if (t.maxwidth) add(S[i0].cum, "width", `Width limit ${fmtLimit(t.maxwidth)} on ${road}. Check whether buses are exempt`);
-    if (isBusGate(t)) add(S[i0].cum, "busgate", `Bus-only section on ${road} (bus gate): other traffic may stop or turn here unexpectedly`);
+    // bus gates on named roads only (unnamed bus-only links are usually bus station approaches), once per road
+    if (isBusGate(t) && nameAt(i0) && !busRoads.has(road)) { busRoads.add(road); add(S[i0].cum, "busgate", `Bus-only section on ${road} (bus gate): other traffic may stop or turn here unexpectedly`); }
     if (is20(t)) add(S[i0].cum, "speed20", road);
     if (t.bridge === "yes" && t.name) { /* the route itself crosses a bridge: not a hazard */ }
   }));
@@ -235,7 +245,7 @@ function processDirection(dir, osm, P, label) {
     if (t.railway === "level_crossing") { const i = near(n, 20); if (i >= 0) add(S[i].cum, "level", `Level crossing on ${nameAt(i) || "the route"}`); }
     else if (t.highway === "mini_roundabout") { const i = near(n, 15); if (i >= 0) add(S[i].cum, "mini", `Mini roundabout on ${nameAt(i) || "the route"}`); }
     else if (t.highway === "traffic_signals") { const i = near(n, 12); if (i >= 0) add(S[i].cum, "signals", ""); }
-    else if (t.highway === "crossing" && (t.crossing === "zebra" || t.crossing_ref === "zebra" || t.crossing === "uncontrolled" || t.crossing === "marked")) { const i = near(n, 12); if (i >= 0) add(S[i].cum, "zebra", ""); }
+    else if (t.highway === "crossing" && (t.crossing === "zebra" || t.crossing_ref === "zebra")) { const i = near(n, 12); if (i >= 0) add(S[i].cum, "zebra", ""); }
     if (t.traffic_calming && t.traffic_calming !== "no") {
       const i = near(n, 15); if (i < 0) continue;
       const key = nameAt(i) + "|" + calmingWord(t.traffic_calming);

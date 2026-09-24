@@ -54,6 +54,8 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--amber);outline-
 .rbtn span{font-size:11px;font-weight:600;color:#d9c06a;max-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rbtn[aria-pressed="false"]{opacity:.72}
 .rbtn[aria-pressed="true"]{box-shadow:0 0 0 3px var(--amber)}
+.mappts{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:2px;font-weight:600}
+.mappts .small{font-weight:400}
 
 .dirbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px}
@@ -302,9 +304,9 @@ const W19_SECTIONS = [
   {id:1,name:"Argall Ave & St James St",
    notes:["Terminal area is an industrial estate: HGVs, reversing vans and parked lorries.","Barn Croft Primary School: expect children and parents at school start and finish.","Towards Walthamstow the timetable ends at Argall Avenue Industrial Estate (AP). Staffa Road (AS) is the first stop towards Ilford."]},
   {id:2,name:"Higham Hill & Forest Road",
-   notes:["This section runs between the St James Street end and Forest Road. Confirm the exact roads (listed as Palmerston Road and the west end of High Street) with your trainer.","Forest Road is a busy main road. Lloyd Park / William Morris Gallery brings visitors and families.","The Bell junction (Forest Road / Hoe Street / Chingford Road) is a large signalled junction."]},
+   notes:["While Selborne Road is closed (until 30 Nov 2026), TfL’s stop list sends the W19 this way: Palmerston Road, Forest Road and Hoe Street. The bus map shows the normal route going straight via St James Street and Selborne Road to Walthamstow Central, so learn both with your trainer.","Forest Road is a busy main road. Lloyd Park / William Morris Gallery brings visitors and families.","The Bell junction (Forest Road / Hoe Street / Chingford Road) is a large signalled junction."]},
   {id:3,name:"Walthamstow Central & Hoe Street",
-   notes:["Walthamstow bus station: low speed, heavy pedestrian flow, many routes using the stands.","Selborne Road is closed for water works until 22:00 on Mon 30 Nov 2026. W19 is diverted and misses the Selborne Walk stop.","Towards Ilford you serve Walthamstow Central Station (V). Towards Walthamstow you serve Queen’s Road (L) instead.","Crew changeover point is recorded publicly as Walthamstow Central. Check your duty card."]},
+   notes:["Walthamstow bus station: low speed, heavy pedestrian flow, many routes using the stands.","Selborne Road is closed for water works until 22:00 on Mon 30 Nov 2026. W19 is diverted via Forest Road and Hoe Street and misses the Selborne Walk stop. When it reopens, the app will warn you if TfL’s stop list changes.","Towards Ilford you serve Walthamstow Central Station (V). Towards Walthamstow you serve Queen’s Road (L) instead.","Crew changeover point is recorded publicly as Walthamstow Central. Check your duty card."]},
   {id:4,name:"Lea Bridge Road & Whipps Cross",
    notes:["The route differs at Bakers Arms. Towards Ilford you go straight from Hoe Street onto Lea Bridge Road. Towards Walthamstow the trace leaves Lea Bridge Road by Leyton Green Road and returns via High Road Leyton to Bakers Arms.","Whipps Cross bus station (in use since January 2019) and Whipps Cross roundabout.","Hospital grounds are a private road: low speed, give way to ambulances, never block A&E access."]},
   {id:5,name:"Leytonstone",
@@ -323,9 +325,9 @@ const W19_OUT = [ // Staffa Road -> Ilford Hainault Street
  ["Barn Croft Primary School","","South Access Road",1,51.57656,-0.03514,"v"],
  ["Markhouse Avenue","K","Markhouse Road",1,51.57925,-0.03061,"v"],
  ["South Grove","G","South Grove",1,51.58045,-0.02974,"v"],
- ["Walthamstow Market / High Street","S","High Street (west end)",2,51.58373,-0.02863,"v"],
- ["St Michael & All Angels","A","Palmerston Road",2,51.5854,-0.02925,"v"],
- ["Forest Road / High Hill","B","Forest Road",2,51.58847,-0.0303,""],
+ ["Walthamstow Market / High Street","S","Palmerston Road (High Street end)",2,51.58373,-0.02863,"v"],
+ ["Church of St Michael & All Angels","A","Palmerston Road",2,51.5854,-0.02925,"v"],
+ ["Forest Road","B","Palmerston Road (by Forest Road)",2,51.58847,-0.0303,"v"],
  ["Wolsey Avenue","N","Forest Road",2,51.58983,-0.0274,""],
  ["Lloyd Park / William Morris Gallery","BE","Forest Road",2,51.59049,-0.02233,""],
  ["Bromley Road","BF","Forest Road",2,51.59054,-0.01875,""],
@@ -339,13 +341,13 @@ const W19_OUT = [ // Staffa Road -> Ilford Hainault Street
  ["Lea Bridge Road / Bakers Arms","EH","Lea Bridge Road",4,51.57572,-0.01231,""],
  ["Leyton Green Road","EJ","Lea Bridge Road",4,51.57768,-0.00835,""],
  ["Shernhall Street","EK","Lea Bridge Road",4,51.57937,-0.00518,""],
- ["Peterborough Road / Lea Bridge Road","EL","Lea Bridge Road",4,51.58002,-0.00344,""],
+ ["Peterborough Road (Lea Bridge Road)","EL","Lea Bridge Road",4,51.58002,-0.00344,""],
  ["Whipps Cross / Wood Street","A","Whipps Cross Roundabout",4,51.58116,-0.00093,""],
  ["Whipps Cross Bus Stand","V","Whipps Cross bus station",4,51.58117,0.00166,"k"],
  ["Whipps Cross Hospital / Main Entrance","K","Hospital grounds (private road)",4,51.57957,0.00118,""],
  ["Whipps Cross Hospital / A & E","L","Hospital grounds (private road)",4,51.57747,0.00275,""],
  ["Clare Road","Q","James Lane",5,51.57473,0.00293,""],
- ["Peterborough Road (Leytonstone)","","James Lane",5,51.57402,0.00152,"v"],
+ ["Peterborough Road (James Lane)","","James Lane",5,51.57402,0.00152,"v"],
  ["Essex Road South","","Essex Road South",5,51.57224,0.00093,""],
  ["Elim Pentecostal Church","","Hainault Road",5,51.571,0.00088,"v"],
  ["Clarendon Road","","Hainault Road",5,51.56954,0.0039,"v"],
@@ -362,14 +364,14 @@ const W19_OUT = [ // Staffa Road -> Ilford Hainault Street
  ["City of London Cemetery","G","Aldersbrook Road",6,51.55696,0.04464,""],
  ["Capel Road","","Forest Drive / Capel Road",6,51.55451,0.04651,"v"],
  ["Manor Park Station","B","Station Road",6,51.55283,0.04665,"k"],
- ["Romford Road (E12)","J","Romford Road",7,51.55006,0.04772,""],
+ ["Romford Road","J","Romford Road",7,51.55006,0.04772,""],
  ["First Avenue","K","Romford Road",7,51.55196,0.05137,""],
  ["Rabbits Road","L","Romford Road",7,51.55338,0.05531,""],
  ["Seventh Avenue","M","Romford Road",7,51.55363,0.05565,""],
  ["Little Ilford Lane","N","Romford Road",7,51.55509,0.06024,""],
  ["North Circular Road","P","Romford Road",7,51.55601,0.06383,""],
  ["Ilford Station / Ilford Hill","F","Ilford Hill",7,51.55816,0.06891,"k"],
- ["Chapel Road","P","Chapel Road",7,51.55769,0.07024,"v"],
+ ["Ilford / Chapel Road","P","Chapel Road",7,51.55769,0.07024,""],
  ["Redbridge Central Library","R","Clements Road",7,51.55815,0.07435,"v"],
  ["Hainault Street","S","Hainault Street",7,51.55967,0.07696,"t"]
 ];
@@ -377,7 +379,7 @@ const W19_INB = [ // Ilford Hainault Street -> Argall Avenue
  ["Hainault Street","V","Hainault Street",7,51.55967,0.07696,"t"],
  ["Redbridge Central Library","Q","Clements Road",7,51.55815,0.07435,"v"],
  ["Ilford Broadway","L","Ilford High Road / Broadway",7,51.5586,0.0716,"v"],
- ["Chapel Road","Y","Chapel Road",7,51.55736,0.06785,"v"],
+ ["Chapel Road","Y","Chapel Road",7,51.55736,0.06785,""],
  ["Dersingham Avenue","A","Romford Road",7,51.55528,0.06203,""],
  ["Little Ilford Lane","B","Romford Road",7,51.55509,0.06024,""],
  ["Rabbits Road","C","Romford Road",7,51.55338,0.05531,""],
@@ -404,8 +406,8 @@ const W19_INB = [ // Ilford Hainault Street -> Argall Avenue
  ["Whipps Cross Hospital / A & E","N","Hospital grounds (private road)",4,51.57747,0.00275,""],
  ["Whipps Cross Hospital / Main Entrance","J","Hospital grounds (private road)",4,51.57957,0.00118,""],
  ["Whipps Cross Bus Stand","M","Whipps Cross bus station",4,51.58117,0.00166,"k"],
- ["Peterborough Road / Lea Bridge Road","WA","Lea Bridge Road",4,51.58002,-0.00344,""],
- ["Whipps Cross Essex Road","WB","Lea Bridge Road",4,51.57837,-0.00678,""],
+ ["Peterborough Road (Lea Bridge Road)","WA","Lea Bridge Road",4,51.58002,-0.00344,""],
+ ["Essex Road","WB","Lea Bridge Road",4,51.57837,-0.00678,""],
  ["Leyton Green Road","WK","Lea Bridge Road",4,51.57768,-0.00835,""],
  ["Lea Bridge Road / Bakers Arms","ND","High Road Leyton",4,51.5748,-0.0119,"v"],
  ["Hoe Street / Bakers Arms","NE","Hoe Street",3,51.5759,-0.0142,""],
@@ -414,14 +416,14 @@ const W19_INB = [ // Ilford Hainault Street -> Argall Avenue
  ["Walthamstow Bus Station","E","Walthamstow bus station",3,51.58369,-0.02046,"k"],
  ["Walthamstow Market","G","Hoe Street",3,51.58548,-0.0197,""],
  ["Jewel Road","BA","Hoe Street",3,51.58849,-0.02032,""],
- ["Forest Road / The Bell","BH","Forest Road",2,51.5897,-0.01825,""],
+ ["Forest Road / the Bell","BH","Forest Road",2,51.5897,-0.01825,""],
  ["Bromley Road","BC","Forest Road",2,51.59054,-0.01875,""],
  ["Lloyd Park / William Morris Gallery","BD","Forest Road",2,51.59049,-0.02233,""],
  ["Wolsey Avenue","R","Forest Road",2,51.58983,-0.0274,""],
  ["Higham Hill Road","S","Forest Road",2,51.58932,-0.02943,"v"],
- ["Forest Road / High Hill","J","Palmerston Road",2,51.5880,-0.0302,"v"],
- ["St Michael & All Angels","K","Palmerston Road",2,51.5854,-0.02925,"v"],
- ["Walthamstow Market / High Street","L","High Street (west end)",2,51.58373,-0.02863,"v"],
+ ["Forest Road","J","Palmerston Road (by Forest Road)",2,51.5880,-0.0302,"v"],
+ ["Church of St Michael & All Angels","K","Palmerston Road",2,51.5854,-0.02925,"v"],
+ ["Walthamstow Market / High Street","L","Palmerston Road (High Street end)",2,51.58373,-0.02863,"v"],
  ["South Grove","H","South Grove",1,51.58045,-0.02974,"v"],
  ["Markhouse Avenue","J","Markhouse Road",1,51.57925,-0.03061,"v"],
  ["Barn Croft Primary School","","South Access Road",1,51.57656,-0.03514,"v"],
@@ -444,7 +446,7 @@ const W19_STEPS = {
   {at:[-0.037389,51.575362],act:"turn",road:"South Access Road",v:1},
   {at:[-0.030394,51.578608],act:"turn",road:"Markhouse Road",v:1},
   {at:[-0.030376,51.580361],act:"turn",road:"South Grove",v:1},
-  {at:[-0.028198,51.581314],act:"turn",road:"St James Street / Palmerston Road (northbound)",v:1,extra:"Serves Walthamstow Market / High Street (S) and St Michael & All Angels (A)."},
+  {at:[-0.028198,51.581314],act:"turn",road:"St James Street / Palmerston Road (northbound)",v:1,extra:"Serves Walthamstow Market / High Street (S), Church of St Michael & All Angels (A) and Forest Road (B)."},
   {at:[-0.030642,51.58889],act:"turn",road:"Forest Road (eastbound)"},
   {at:[-0.017363,51.590159],act:"turn",road:"Hoe Street (southbound)",extra:"At The Bell junction."},
   {at:[-0.019431,51.583242],act:"note",text:"Serve Walthamstow bus station (stop B)",extra:"Selborne Road diversion in force: follow the garage diversion notice for the way in and out."},
@@ -961,6 +963,7 @@ function renderNotesW19(){
   const onlyIn=DIRS.in.stops.filter(s=>!nameSet("out").has(s.name)).map(s=>s.name);
   $("#p-notes").innerHTML=`
   ${liveNotesHtml()}
+  ${mapCardHtml()}
   <div class="card" style="display:flex;flex-direction:column;gap:14px">
     <h2>Route at a glance</h2>
     <dl class="facts" style="margin:0">
@@ -982,7 +985,7 @@ function renderNotesW19(){
       <tr><th>Place</th><th>To Ilford</th><th>To Walthamstow</th></tr>
       <tr><td>Walthamstow terminal</td><td>Starts at Staffa Road (AS)</td><td>Ends at Argall Avenue Industrial Estate (AP)</td></tr>
       <tr><td>Walthamstow Central</td><td>Bus station (B), then Central Station (V) on Hoe Street</td><td>Queen’s Road (L), then bus station (E)</td></tr>
-      <tr><td>Forest Road / The Bell</td><td>Bromley Road (BF), then down Hoe Street</td><td>Forest Road / The Bell (BH) and Higham Hill Road (S) extra</td></tr>
+      <tr><td>Forest Road / the Bell</td><td>Bromley Road (BF), then down Hoe Street</td><td>Forest Road / the Bell (BH) and Higham Hill Road (S) extra</td></tr>
       <tr><td>Bakers Arms</td><td>Hoe Street straight onto Lea Bridge Road</td><td>Leyton Green Road and High Road Leyton back to Bakers Arms (confirm on drive)</td></tr>
       <tr><td>Lea Bridge Road</td><td>Shernhall Street (EK) and Wood Street (A)</td><td>Essex Road (WB)</td></tr>
       <tr><td>Aldersbrook</td><td>Herongate Road (D)</td><td>Wanstead Park Avenue (K) and Dover Road (N)</td></tr>
@@ -1149,8 +1152,22 @@ function startApp(){
 
 /* ---------- ROUTES: W19 is hand-made; the other garage routes are built from TfL data ---------- */
 let SECTIONS=[], DIRS=null, TRACE_OUT=[], TRACE_IN=[], STEPS={out:[],in:[]}, AREAS=[], ROUTE=null;
-let ROUTES_INDEX=null;
+let ROUTES_INDEX=null, ROUTE_NOTES=null;
 try{ROUTES_INDEX=JSON.parse(localStorage.getItem("w19:routes")||"null")}catch(e){}
+try{ROUTE_NOTES=JSON.parse(localStorage.getItem("w19:notes")||"null")}catch(e){}
+// hand-kept notes per route (web/data/route-notes.json): bus map summary, service hours, terminus names, temporary changes
+const rnote=id=>(ROUTE_NOTES&&ROUTE_NOTES.routes&&ROUTE_NOTES.routes[id])||{};
+const endAlias=(id,n)=>(rnote(id).ends||{})[n]||n;
+function mapCardHtml(){
+  const n=rnote(ROUTE.id), today=new Date().toISOString().slice(0,10);
+  const temp=(n.temporary||[]).filter(t=>!t.until||t.until>=today);
+  let h=temp.map(t=>`<div class="alert"><strong>${esc(t.title||"Temporary change")}</strong><span>${esc(t.text)}</span>${t.until?`<span class="small">Until ${esc(t.until.slice(8,10)+"/"+t.until.slice(5,7)+"/"+t.until.slice(0,4))}</span>`:""}</div>`).join("");
+  if(n.map||n.service)h+=`<div class="card" style="display:flex;flex-direction:column;gap:10px"><h2>${esc(ROUTE.name)} on the bus map</h2>
+    ${n.service?`<p><strong>Service:</strong> ${esc(n.service)}.</p>`:""}
+    ${n.map?`<ol class="mappts">${n.map.map(p=>`<li>${esc(p.place)}${p.stop&&p.stop!==p.place?` <span class="small">· stop: ${esc(p.stop)}</span>`:""}</li>`).join("")}</ol>`:""}
+    <p class="small">From ${esc((ROUTE_NOTES&&ROUTE_NOTES.source)||"the bus map")}. The map lists the main places on the route, not every stop.</p></div>`;
+  return h;
+}
 const routeCache={};
 async function getLocal(p){const r=await fetch(p,{cache:"no-store"});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
 const routeKey=id=>{const m=String(id).toUpperCase().match(/^([A-Z]*)(\d*)(.*)$/);return [m[1]?1:0,m[1],+m[2]||0,m[3]]};
@@ -1200,20 +1217,27 @@ const PRIORITY={height:0,width:0,busgate:0,level:0,rbt:1,mini:2,hospital:3,schoo
 // "Look out for" notes for each section, built from the OpenStreetMap features on both directions
 function osmSectionNotes(sections,osm,secOut,secIn,outS,inS,outDest,inDest){
   const per=sections.map(()=>new Map()); // text -> {p, dirs:Set}
+  const calm=sections.map(()=>new Map()); // what -> Set(roads)
   const addNote=(k,text,p,d,kind)=>{if(k<1||!per[k-1])return;const m=per[k-1];if(!m.has(text))m.set(text,{p,kind,dirs:new Set()});m.get(text).dirs.add(d)};
   [["out",secOut,osm.out],["in",secIn,osm.in]].forEach(([d,secs,o])=>{
     const counts=sections.map(()=>({signals:0,zebra:0,speed20:new Set()}));
     (o.features||[]).forEach(f=>{
       const k=secs[Math.min(f.s,secs.length-1)], c=counts[k-1]; if(!c)return;
       if(f.kind==="signals")c.signals++; else if(f.kind==="zebra")c.zebra++; else if(f.kind==="speed20")c.speed20.add(noRef(f.text));
-      else addNote(k,f.text,PRIORITY[f.kind]??6,d,f.kind);
+      else if(f.kind==="calming"){ // one combined line per section, both directions
+        const m=f.text.match(/^(.*?) on (.*?)(?: \(\d+\))?$/); if(!m||/islands/i.test(m[1]))return;
+        const w=m[1].toLowerCase(); if(!calm[k-1].has(w))calm[k-1].set(w,new Set()); calm[k-1].get(w).add(noRef(m[2]));
+      }
+      // places are beside the road whichever way you're going; only road features can be one-way
+      else addNote(k,f.text,PRIORITY[f.kind]??6,/^(school|college|hospital|marketplace|station|busstation)$/.test(f.kind)?"both":d,f.kind);
     });
     if(d==="out")counts.forEach((c,i)=>{
       if(c.speed20.size)addNote(i+1,`20 mph on ${[...c.speed20].join(", ")}`,6,"both");
-      const bits=[c.signals?`${c.signals} set${c.signals>1?"s":""} of traffic lights`:"",c.zebra?`${c.zebra} zebra or uncontrolled crossing${c.zebra>1?"s":""}`:""].filter(Boolean);
+      const bits=[c.signals?`${c.signals} set${c.signals>1?"s":""} of traffic lights`:"",c.zebra?`${c.zebra} zebra crossing${c.zebra>1?"s":""}`:""].filter(Boolean);
       if(bits.length)addNote(i+1,`${bits.join(" and ")} ${toward({dest:outDest})}`,7,"both");
     });
   });
+  calm.forEach((m,i)=>{if(m.size)addNote(i+1,"Traffic calming: "+[...m.entries()].map(([w,r])=>`${w} on ${[...r].join(", ")}`).join("; "),5,"both","calming")});
   // a note seen in both directions (even in different sections) isn't one-way only
   const seenDir={out:new Set(),in:new Set()};
   per.forEach(m=>m.forEach((v,t)=>v.dirs.forEach(d=>seenDir[d]&&seenDir[d].add(t))));
@@ -1257,7 +1281,7 @@ function setupAuto(r,osm){
     return [s.name,s.letter||"",road,secs[i],s.lat,s.lon,((i===0||i===S.length-1)?"t":(keyRe.test(s.name)?"k":""))+(v&&road?"v":"")];
   });
   const via=S=>{const p=[0.25,0.5,0.75].map(f=>shortName(S[Math.min(S.length-2,Math.max(1,Math.round(f*(S.length-1))))].name));return "via "+[...new Set(p)].join(" · ")};
-  const outDest=shortName(outS[outS.length-1].name), inDest=shortName(inS[inS.length-1].name);
+  const outDest=shortName(endAlias(r.id,outS[outS.length-1].name)), inDest=shortName(endAlias(r.id,inS[inS.length-1].name));
   if(osm)sections=osmSectionNotes(sections,osm,secOut,secIn,outS,inS,outDest,inDest);
   ROUTE={id:r.id,name:r.name||r.id.toUpperCase(),curated:false,updated:r.updated,osm:!!osm,osmDate:osm&&osm.generated};
   SECTIONS=sections; AREAS=[];
@@ -1307,13 +1331,17 @@ function renderRouteBar(){
   $("#garageName").textContent=g&&g.name?`${g.name}${g.code?` (${g.code})`:""} routes`:"Garage routes";
   $("#routeBar").innerHTML=routeIds().map(id=>{
     const m=routeMeta(id), name=m?m.name:id.toUpperCase();
-    const ends=id==="w19"?"Ilford ⇄ Walthamstow":m?`${shortName(m.in.to)} ⇄ ${shortName(m.out.to)}`:"";
+    const ends=id==="w19"?"Ilford ⇄ Walthamstow":m?`${shortName(endAlias(id,m.in.to))} ⇄ ${shortName(endAlias(id,m.out.to))}`:"";
     return `<button class="rbtn" type="button" data-r="${esc(id)}" aria-pressed="${ROUTE&&ROUTE.id===id}"><b>${esc(name)}</b><span>${esc(ends)}</span></button>`;
   }).join("");
   $("#routeBar").querySelectorAll(".rbtn").forEach(b=>b.onclick=()=>selectRoute(b.dataset.r));
   const cur=$("#routeBar").querySelector('[aria-pressed="true"]'); if(cur&&cur.scrollIntoView)cur.scrollIntoView({block:"nearest",inline:"nearest"});
 }
 async function startRoutes(){
+  try{
+    const n=await getLocal("data/route-notes.json");
+    if(n&&n.routes){ROUTE_NOTES=n;try{localStorage.setItem("w19:notes",JSON.stringify(n))}catch(e){};if(ROUTE&&ROUTE.curated)renderNotes()}
+  }catch(e){}
   const want=store.get("route","w19");
   if(want!=="w19"&&routeIds().includes(want))selectRoute(want);
   try{
@@ -1373,12 +1401,14 @@ function renderNotesAuto(){
   </div>`:"";
   $("#p-notes").innerHTML=`
   ${liveNotesHtml()}
+  ${mapCardHtml()}
   <div class="card" style="display:flex;flex-direction:column;gap:14px">
     <h2>Route ${esc(ROUTE.name)} at a glance</h2>
     <dl class="facts" style="margin:0">
       ${g.operator?`<div class="fact"><dt>Operator</dt><dd>${esc(g.operator)}</dd></div>`:""}
       ${g.name?`<div class="fact"><dt>Garage</dt><dd>${esc(g.name)}${g.code?` (${esc(g.code)})`:""}</dd></div>`:""}
-      <div class="fact"><dt>Termini</dt><dd>${esc(D.in.stops[D.in.stops.length-1].name)} · ${esc(D.out.stops[D.out.stops.length-1].name)}</dd></div>
+      <div class="fact"><dt>Termini</dt><dd>${esc(endAlias(ROUTE.id,D.in.stops[D.in.stops.length-1].name))} · ${esc(endAlias(ROUTE.id,D.out.stops[D.out.stops.length-1].name))}</dd></div>
+      ${rnote(ROUTE.id).service?`<div class="fact"><dt>Service</dt><dd>${esc(rnote(ROUTE.id).service)}</dd></div>`:""}
       <div class="fact"><dt>Stops</dt><dd>${D.out.stops.length} ${esc(toward(D.out))} · ${D.in.stops.length} ${esc(toward(D.in))}</dd></div>
       <div class="fact"><dt>Length</dt><dd>About ${len(TRACE_OUT).toFixed(1)} miles ${esc(toward(D.out))}, measured along TfL’s route line</dd></div>
       <div class="fact"><dt>Sections</dt><dd>${SECTIONS.length}, of about 8 stops each</dd></div>

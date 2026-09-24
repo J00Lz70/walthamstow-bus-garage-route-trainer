@@ -1,0 +1,39 @@
+{
+  "source": "The Greater London Bus Map, 5 September 2026 edition",
+  "note": "Hand-kept notes for each route. The Publish app workflow never changes this file. 'map' is the route as the bus map lists it; add a 'stop' where the stop's name differs from the place. 'ends' gives the name drivers know for a TfL terminus name. 'temporary' notes disappear after their 'until' date.",
+  "routes": {
+    "379": {
+      "map": [{"place": "Chingford Station"}, {"place": "Kings Head Hill"}, {"place": "Drysdale Avenue", "stop": "Drysdale Avenue / Margaret Avenue"}, {"place": "Yardley Lane Estate (Boardman Avenue)", "stop": "Yardley Lane Estate"}]
+    },
+    "385": {
+      "service": "Monday to Saturday, shopping hours only",
+      "ends": {"Salisbury Hall Sainsbury's": "Crooked Billet (Sainsbury's)"},
+      "map": [{"place": "Chingford Station"}, {"place": "Kings Head Hill", "stop": "Kings Head Hill / Sewardstone Road"}, {"place": "Valley Side"}, {"place": "Waltham Way", "stop": "Waltham Way / Marmion Avenue"}, {"place": "Chingford Mount"}, {"place": "Crooked Billet (Sainsbury's)", "stop": "Salisbury Hall Sainsbury's"}]
+    },
+    "397": {
+      "service": "No evening service",
+      "ends": {"Salisbury Hall Sainsbury's": "Crooked Billet (Sainsbury's)", "The Broadway": "Debden Broadway"},
+      "map": [{"place": "Crooked Billet (Sainsbury's)", "stop": "Salisbury Hall Sainsbury's"}, {"place": "Chingford Mount"}, {"place": "Chingford Avenue"}, {"place": "Simmons Lane"}, {"place": "Chingford Station"}, {"place": "Forest Side"}, {"place": "Whitehall Road", "stop": "Whitehall Road / Bancrofts School"}, {"place": "Woodford Wells"}, {"place": "Loughton High Road"}, {"place": "Loughton Station"}, {"place": "Borders Lane"}, {"place": "Debden Broadway", "stop": "The Broadway"}]
+    },
+    "w5": {
+      "map": [{"place": "Harringay (Sainsbury's)", "stop": "Harringay Sainsbury's"}, {"place": "Endymion Road"}, {"place": "Harringay Station"}, {"place": "Crouch End"}, {"place": "Shepherd's Hill"}, {"place": "Stanhope Road"}, {"place": "Hornsey Lane"}, {"place": "Archway Station"}]
+    },
+    "w11": {
+      "ends": {"Walthamstow Bus Station": "Walthamstow Central"},
+      "map": [{"place": "Walthamstow Central Station", "stop": "Walthamstow Bus Station"}, {"place": "Selborne Road"}, {"place": "Blackhorse Road", "stop": "Forest Road"}, {"place": "Priory Court Estate"}, {"place": "Crooked Billet", "stop": "Salisbury Hall Sainsbury's"}, {"place": "Chingford Hall Estate"}]
+    },
+    "w12": {
+      "ends": {"Rensburg Road": "Coppermill Lane", "Cross Road": "Woodford Bridge"},
+      "map": [{"place": "Coppermill Lane"}, {"place": "St. James Street"}, {"place": "Selborne Road"}, {"place": "Walthamstow Central", "stop": "Walthamstow Bus Station"}, {"place": "Church Hill"}, {"place": "Prospect Hill"}, {"place": "Shernhall Street"}, {"place": "Whipps Cross", "stop": "Whipps Cross / Wood Street"}, {"place": "Whipps Cross Hospital"}, {"place": "Leytonstone Station", "stop": "Leytonstone Stn / Grove Green Road"}, {"place": "Green Man Roundabout"}, {"place": "Wanstead"}, {"place": "Snaresbrook"}, {"place": "South Woodford Station"}, {"place": "Charlie Brown's Roundabout"}, {"place": "Chigwell Road"}, {"place": "Woodford Bridge", "stop": "Cross Road"}],
+      "temporary": [{"until": "2026-11-30", "title": "Selborne Road diversion", "text": "Selborne Road is closed for water works until 22:00 on Mon 30 Nov 2026. TfL’s stop list, and so this app, shows the W12 diverted via Blackhorse Road, Palmerston Road, Forest Road and Hoe Street, missing the Selborne Walk stop. The bus map shows the normal route via St James Street and Selborne Road to Walthamstow Central. Learn both with your trainer."}]
+    },
+    "w16": {
+      "ends": {"Chingford Mount": "Chingford Mount (Prince Albert)"},
+      "map": [{"place": "Chingford Mount (Prince Albert)", "stop": "Chingford Mount"}, {"place": "New Road"}, {"place": "Highams Park", "stop": "Highams Park Station"}, {"place": "Wood Street"}, {"place": "Leyton (Bakers Arms)", "stop": "Lea Bridge Road / Bakers Arms"}, {"place": "Hainault Road"}, {"place": "Leytonstone Station", "stop": "Leytonstone Station / Grove Green Road"}]
+    },
+    "w19": {
+      "map": [{"place": "Ilford High Road", "stop": "Hainault Street"}, {"place": "Manor Park", "stop": "Manor Park Station"}, {"place": "Aldersbrook Road"}, {"place": "Green Man Roundabout"}, {"place": "Leytonstone Station", "stop": "Leytonstone Station / Grove Green Road"}, {"place": "Whipps Cross Hospital"}, {"place": "Whipps Cross", "stop": "Whipps Cross / Wood Street"}, {"place": "Leyton (Bakers Arms)", "stop": "Lea Bridge Road / Bakers Arms"}, {"place": "Walthamstow Central"}, {"place": "South Access Road"}, {"place": "Walthamstow (Argall Avenue Industrial Estate)", "stop": "Argall Avenue Industrial Estate"}],
+      "temporary": [{"until": "2026-11-30", "title": "Selborne Road diversion", "text": "Selborne Road is closed for water works until 22:00 on Mon 30 Nov 2026. TfL’s stop list, and this trainer, show the W19 diverted via Palmerston Road, Forest Road and Hoe Street, missing the Selborne Walk stop. The bus map shows the normal route via St James Street and Selborne Road to Walthamstow Central. Learn both with your trainer."}]
+    }
+  }
+}
