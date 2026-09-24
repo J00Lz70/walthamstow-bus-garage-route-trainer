@@ -3,13 +3,14 @@ name: Publish app
 # Publishes web/ to GitHub Pages. Before each publish it downloads every garage route's
 # stops, letters and route line from TfL (routes listed in web/data/garage.json) and the
 # current service status, then matches any changed route to OpenStreetMap for road names
-# and hazards. Runs on every change, every 3 hours, and on demand.
+# and hazards. Runs on every change, every 15 minutes, and on demand.
+# (GitHub runs scheduled workflows on a best-effort basis, so a run can start a few minutes late.)
 on:
   push:
     branches: [main]
     paths: ["web/**", "scripts/**", ".github/workflows/pages.yml"]
   schedule:
-    - cron: "17 */3 * * *"
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 
 permissions:
@@ -53,7 +54,9 @@ jobs:
             git push || echo "::warning::Couldn't save route data to the repository. The published app still has it."
           fi
       - name: Stamp version into the service worker
-        run: sed -i "s/__BUILD__/$(date -u +%Y%m%d%H%M)-${GITHUB_SHA::7}/" web/sw.js
+        # The version only changes when the app itself changes, so a data-only refresh
+        # doesn't show everyone a "new version" bar.
+        run: sed -i "s/__BUILD__/$(cat web/index.html web/manifest.webmanifest web/sw.js | sha1sum | cut -c1-12)/" web/sw.js
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
