@@ -24,34 +24,6 @@ Both installable apps open the hosted web app. When you change anything in `web/
 
 ---
 
-## One-time setup (about 15 minutes)
-
-### 1. Put the files on GitHub
-1. Sign in at github.com (create a free account if you don't have one).
-2. Click **+** (top right) → **New repository**. Name it `walthamstow-route-trainer` and choose **Public**. Free GitHub Pages hosting needs a public repository. The trainer has no private data. Click **Create repository**.
-3. On the new repository page, click **uploading an existing file**. Drag in **everything inside** this folder, including the `.github` folder. On a Mac, press Cmd+Shift+. in Finder to show hidden folders like `.github`. Click **Commit changes**.
-
-### 2. Turn on the website
-1. In the repository, go to **Settings → Pages**.
-2. Under **Build and deployment → Source**, choose **GitHub Actions**.
-3. Go to the **Actions** tab. If asked, click **I understand my workflows, go ahead and enable them**.
-4. Click **Publish app** → **Run workflow** → **Run workflow**. This first run also downloads all the routes from TfL and matches them to OpenStreetMap.
-5. After five to ten minutes the run shows a green tick. Your app is live at
-   `https://YOUR-USERNAME.github.io/walthamstow-route-trainer/`
-
-### 3. Add the Android signing key (recommended)
-Open `android-signing-secrets.txt`. It comes separately from this folder, so don't upload it. In the repository, go to **Settings → Secrets and variables → Actions → New repository secret** and add the four secrets listed in that file.
-
-Without them the Android app still builds, but each new APK would need the old one uninstalled first, which erases drill progress.
-
-### 4. Build the Android and Windows apps
-1. **Actions** tab → **Build Android and Windows apps** → **Run workflow**.
-2. It takes about 10 minutes. When it finishes, open the **Releases** section on the repository's main page (right-hand side). The latest release has both files.
-
-The **Driver notes** tab in the app also links to this downloads page.
-
----
-
 ## Installing
 
 **Android (APK):** open the release page on your phone and download `Walthamstow-Route-Trainer.apk`. Open it and allow installs from your browser if Android asks.
@@ -97,4 +69,4 @@ Alternatively, open the web app address in Edge or Chrome and click **Install ap
 | `.github/workflows/apps.yml` | Builds the APK and Windows installer and attaches them to a release |
 | `scripts/app-url.sh` | Works out the web app address for the builds |
 
-For study before you drive. Never look at a phone while driving. Your trainer, duty card and garage notices take priority over this app.
+For study before you drive or as a passenger. Never use in the cab, Never look at a phone while driving. Your trainer, duty card and garage notices take priority over this app.
