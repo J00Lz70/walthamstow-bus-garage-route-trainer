@@ -1,0 +1,103 @@
+name: Build Android and Windows apps
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+      - name: Point the app at the web app and bundle an offline copy
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+        run: |
+          URL=$(bash scripts/app-url.sh)
+          echo "App address: $URL"
+          sed -i "s#__START_URL__#${URL}#" android/app/src/main/res/values/strings.xml
+          mkdir -p android/app/src/main/assets
+          cp -r web android/app/src/main/assets/www
+      - name: Load signing key (if set up)
+        env:
+          KS: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KS" ]; then
+            echo "$KS" | base64 -d > "$RUNNER_TEMP/release.jks"
+            echo "ANDROID_KEYSTORE_FILE=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+            echo "Signing with your release key."
+          else
+            echo "::warning::No ANDROID_KEYSTORE_BASE64 secret, so this APK uses a temporary key. Installing a later build will need an uninstall first."
+          fi
+      - name: Build APK
+        working-directory: android
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: gradle assembleRelease -PversionCode=${{ github.run_number }} --no-daemon --stacktrace
+      - run: cp android/app/build/outputs/apk/release/app-release.apk Walthamstow-Route-Trainer.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android
+          path: Walthamstow-Route-Trainer.apk
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Point the app at the web app and bundle an offline copy
+        shell: bash
+        env:
+          APP_URL: ${{ vars.APP_URL }}
+        run: |
+          URL=$(bash scripts/app-url.sh)
+          echo "App address: $URL"
+          printf '{"url":"%s"}\n' "$URL" > desktop/config.json
+          cp -r web desktop/offline
+      - name: Build installer
+        shell: bash
+        working-directory: desktop
+        run: |
+          npm install --no-audit --no-fund
+          npm version "1.0.${{ github.run_number }}" --no-git-tag-version
+          npx electron-builder --win nsis --publish never
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: desktop/dist/Walthamstow-Route-Trainer-Setup.exe
+
+  release:
+    needs: [android, windows]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+          path: out
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || format('apps-{0}', github.run_number) }}
+          name: Walthamstow Route Trainer apps (build ${{ github.run_number }})
+          make_latest: true
+          body: |
+            **Android:** download `Walthamstow-Route-Trainer.apk` on your phone and open it. Allow installs from your browser if Android asks.
+            **Windows:** download and run `Walthamstow-Route-Trainer-Setup.exe`. If Windows SmartScreen appears, choose More info, then Run anyway.
+            Both apps open the hosted trainer, so new routes, content and TfL updates arrive without reinstalling.
+          files: |
+            out/Walthamstow-Route-Trainer.apk
+            out/Walthamstow-Route-Trainer-Setup.exe
