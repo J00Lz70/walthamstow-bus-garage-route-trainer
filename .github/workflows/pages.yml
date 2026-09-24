@@ -1,0 +1,62 @@
+name: Publish app
+
+# Publishes web/ to GitHub Pages. Before each publish it downloads every garage route's
+# stops, letters and route line from TfL (routes listed in web/data/garage.json) and the
+# current service status, then matches any changed route to OpenStreetMap for road names
+# and hazards. Runs on every change, every 3 hours, and on demand.
+on:
+  push:
+    branches: [main]
+    paths: ["web/**", "scripts/**", ".github/workflows/pages.yml"]
+  schedule:
+    - cron: "17 */3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Download route data and status from TfL
+        env:
+          TFL_APP_KEY: ${{ secrets.TFL_APP_KEY }}
+        run: node scripts/fetch-tfl.mjs
+      - name: Add road names and hazards from OpenStreetMap
+        run: node scripts/enrich-osm.mjs
+      - name: Save route changes to the repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add web/data/routes web/data/routes.json web/data/changes.json web/data/osm
+          if git diff --cached --quiet; then
+            echo "No route changes."
+          else
+            git commit -m "Update route data from TfL"
+            git pull --rebase --quiet || true
+            git push || echo "::warning::Couldn't save route data to the repository. The published app still has it."
+          fi
+      - name: Stamp version into the service worker
+        run: sed -i "s/__BUILD__/$(date -u +%Y%m%d%H%M)-${GITHUB_SHA::7}/" web/sw.js
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+      - id: deployment
+        uses: actions/deploy-pages@v4
